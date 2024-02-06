@@ -1,3 +1,5 @@
+This project is create with React, nodejs, express and mysql... /°-°/
+
 For this project we need install the following:
 Xampp or wamp server.
 Node js version 20.10.00.
