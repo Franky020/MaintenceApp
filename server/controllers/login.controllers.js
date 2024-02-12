@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken'
 import {pool} from '../db.js'
 import bcrypt from 'bcrypt'
 
@@ -15,7 +16,6 @@ export const login = async (req, res) => {
     }
     //buscar usuario
     const [user] = await pool.query(`SELECT * FROM usuarios WHERE correo = ?`, correo);
-
     if (!user.length) {
       return res.status(401).json({
         status: 'Error',
@@ -33,19 +33,28 @@ export const login = async (req, res) => {
       });
     }
     //obtener y devolver un Token
-    
+    const userForToken = {
+      username: user.nombre,
+      codigo: user.codigo,
+    }
+  
+    //const token = jwt.sign(userForToken, process.env.SECRET)
 
-    // Retorno de información del usuario
-   res.json({
-    codigo: user[0].codigo,
-    nombre: user[0].nombre,
-    apellidopaterno: user[0].apellidopaterno,
-    apellidomaterno: user[0].apellidomaterno,
-    correo: user[0].correo,
-    tipoUsuario: user[0].tipoUsuario,
-    avatar: user[0].avatar,
-   
-   })
+    const token = jwt.sign(userForToken, 'claveSecreta', {expiresIn: '30m'});
+  
+    // Retorno de información del usuario con un token unico
+    res
+      .status(200)
+      .send({ 
+        token, 
+        codigo: user.codigo,
+        nombre: user[0].nombre,
+        apellidopaterno: user[0].apellidopaterno,
+        apellidomaterno: user[0].apellidomaterno,
+        correo: user[0].correo,
+        tipoUsuario: user[0].tipoUsuario,
+        avatar: user[0].avatar,
+      })
   
   } catch (error) {
     console.error(error);

@@ -17,6 +17,7 @@ const Suppliers = lazy(() => import("../pages/Suppliers"));
 const Customers = lazy(() => import("../pages/Customers"));
 const Users = lazy(() => import("../pages/Users"));
 const Login = lazy(() => import("../components/Login/Login"));
+const HomePublic = lazy(() => import("../pages/HomePublic"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const AdminContextProvider = lazy(() => import("../context/AdminProvider"));
 
@@ -72,7 +73,8 @@ export const Routing = () => {
         <BrowserRouter>
           <Routes>
             {/*Ruta publica */}
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<HomePublic />} />
+            <Route path="/login" element={<Login />} />
 
             <Route path="*" element={<NotFound />} />
             {/*Rutas de administrador */}
